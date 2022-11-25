@@ -1,44 +1,48 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
+#Trigger builds only on the master branch
+#Add additional options for more branches to target
 trigger:
-- master
+- webapp
 
-pool:
-  vmImage: 'windows-latest'
+#Run build for all Pull Requests targetting master branch
+#Add additional options for more branches to target
+pr:
+- webapp
+
+#Create a unique name for the build based on your project requirements
+#BuildID is the unique ID for the build
+name: $(Year:yy).$(Month).$(DayOfMonth).$(BuildID)-$(SourceBranchName)
 
 variables:
-  solution: '**/*.sln'
+  AgentImage: "windows-latest" #See available agent images: https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops#use-a-microsoft-hosted-agent
+  system.debug: true #Setting debug to true will add extra output to the logs but can be useful while trying to determine full reason for failure
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@0
+stages:
+- stage: 'Build' #Stage name cannot have spaces
+  jobs:
+  - job: 'Build' #Job name cannot have spaces
+    displayName: 'Application Build' #Name displayed when viewing in Azure DevOps
+    pool:
+      vmImage: $(AgentImage) #See available agent images: https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops#use-a-microsoft-hosted-agent
+    steps:
+    - task: NuGetToolInstaller@0
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: NuGetCommand@2
+      inputs:
+        command: 'restore'
+        restoreSolution: 'Web servers/**/*.sln'
+      
+    - task: VSBuild@1
+      inputs:
+        solution: 'Web servers/**/*.sln'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)/Terraform'
-  inputs:
-    SourceFolder: 'Resource deployment terraform'
-    TargetFolder: '$(build.artifactstagingdirectory)/Terraform'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop3'
+        

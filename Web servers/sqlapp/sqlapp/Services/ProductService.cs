@@ -11,7 +11,7 @@ namespace sqlapp.Services
 
         public async Task <List<Product>> GetProducts()
         {
-            String FunctionURL = "https://rest.azurewebsites.net/api/GetProducts?code=VnWYeYzw0zv9N-m1EQkWubpJHfFjp5uiugHIzTPkoU_4AzFuIowcdw==";
+            String FunctionURL = "https://restapi123221.azurewebsites.net/api/GetProducts?code=2ruN3KnPJSrDxCO7sifYVKTfykYLyiFYeK1V3bCh0RJBAzFuEDFPgQ==";
 
             using (HttpClient _client = new HttpClient())
             {

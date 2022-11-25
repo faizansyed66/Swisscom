@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "e2A/vvInC2lUia59LZ3EESxnZBnvm//0Va45wy9nBes149LBjF2YrMqqoJEybJtx1W0sImHk5/Hg5DAGFepGHA==",
+  "dgSpecHash": "Eu2AvGGoXl9fPhmZkj/gKy1Zrcv6nNq3z/MOwJzQMiGj/6Yq4KgIAHmxEd3iqon/iGXcDeYsvuYZ8eLCSdy9MA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ZZ649MV\\Downloads\\Resources (1)\\Calling an Azure Function from a web app\\sqlapp\\sqlapp\\sqlapp.csproj",
+  "projectFilePath": "C:\\Swisscom project\\Swisscom\\Web servers\\sqlapp\\sqlapp\\sqlapp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ZZ649MV\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\ZZ649MV\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
